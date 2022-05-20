@@ -113,7 +113,7 @@ public class JOSESample {
 											.build(); 
 		
 		// Encrypt the JWE with the RSA public key + specified AES CEK
-		Payload jwe_paylod = new Payload("카드번호:1234567890"); // 
+		Payload jwe_paylod = new Payload("Hello World!!"); // 
 		JWEObject jwe = new JWEObject(jwe_header, jwe_paylod);
 		jwe.encrypt(new RSAEncrypter(sc_rsaPublicKey, cek)); //    
 		String jweString = jwe.serialize();
