@@ -31,8 +31,8 @@ $ git push -u origin main
 ```
 // RSA Keypair 생성
 
-// $ openssl genrsa -out visa_keypair.pem 2048
-// $ openssl genrsa -out sc_keypair.pem 2048
+$ openssl genrsa -out visa_keypair.pem 2048
+$ openssl genrsa -out sc_keypair.pem 2048
 		
 // To extract the public part, use the rsa context:
 $ openssl rsa -in visa_keypair.pem -pubout -out visa_publickey.crt
