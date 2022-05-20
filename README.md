@@ -1,5 +1,4 @@
 * git
-
 ```
 $ git config --global user.name "jodongik1"
 $ git config --global user.email jodongik.one@gmai.com
