@@ -1,3 +1,12 @@
+* git
+
+```
+$ git config --global user.name "jodongik1"
+$ git config --global user.email jodongik.one@gmai.com
+$ git remote add origin https://github.com/jodongik1/sample-jose.git
+$ git branch -M main
+$ git push -u origin main
+```
 
 * 사용 라이브러리
 ```
