@@ -6,7 +6,12 @@
 1. 수신측에서는 JWS를 송신측 공개키로 서명 검증  
 1. 수신측에서는 JWE를 공객키로 대칭키 복호화 후 대칭키로 Payload 복호화. 
 
-
+* JOSE 메시지 구조
+- JWE 
+  - Base64URL (UTF8(JWE Header))||'.'||Base64URL (JWE Encrypted Key)||'.'||Base64URL (JWE Initialization Vector)||'.'||Base64URL (JWE Ciphertext)||'.'||Base64URL (JWE Authentication Tag)
+- JWS
+  - Base64URL (UTF8(JWS Header))||'.'||Base64URL (JWE)||'.'||Base64URL (JWS Signature)
+	 
 * git
 
 ```
