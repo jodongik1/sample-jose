@@ -72,7 +72,7 @@ public class JOSESample {
 	 */
 	private void initRsaKeyPair() throws Exception{
 		String prefix = this.getClass().getResource("/").getPath(); 
-		logger.debug("RSA PREFIX_PATH : ",prefix);
+		logger.debug("RSA PREFIX_PATH : "+prefix);
 		
 		// 송신측
 		sanderPublicKey  = readPublicKey(new File(prefix + SANDER_PUBLICKEY_PATH)); // 공개키
