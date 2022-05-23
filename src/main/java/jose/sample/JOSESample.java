@@ -153,7 +153,7 @@ public class JOSESample {
 	
 	/**
 	 * 서명 검증 및 복호화
-	 *    
+	 * 
 	 * @param jweString JWE 구조 - Base64URL (UTF8(JWE Header))||'.'||Base64URL (JWE Encrypted Key)||'.'||Base64URL (JWE Initialization Vector)||'.'||Base64URL (JWE Ciphertext)||'.'||Base64URL (JWE Authentication Tag)
 	 * @param jwsString JWS 구조 - Base64URL (UTF8(JWS Header))||'.'||Base64URL (JWE)||'.'||Base64URL (JWS Signature)
 	 * @throws Exception
