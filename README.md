@@ -58,9 +58,7 @@ $ openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in receive_keypair.pem
 ```
 
 # 알고리즘 설명
-* 대칭키 암호화 기법(Symmetric-Key Cryptography)
-
-단 하나의 키를 송신자와 수신자가 공유하는 방법으로 암호화 통신을 하는 방법이다. 
+* 대칭키 암호화 기법(Symmetric-Key Cryptography)은 하나의 키를 송신자와 수신자가 공유하는 방법으로 암호화 통신을 하는 방법이다. 
 그러나 대칭키는 originality를 구분할 수 없다는 근본적인 문제점을 가지고 있다. 
 만약 암호화 메세지가 노출되는 상황이 발생하면 송신자와 수신자 중 누구로부터 문제상황이 야기된 것인지 판별할 수가 없다. 
 만약 대칭키 시스템을 이용하는 은행과 고객 사이에 보안상의 문제가 발생할 경우 잘잘못을 따질 수도 없고 손해를 입은 쪽이 
