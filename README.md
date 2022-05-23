@@ -1,4 +1,4 @@
-* JOSE 프로세스
+# JOSE 프로세스
  
 1. 수신측 공개키 송신측에 전달, 송신측 공개키 수신측에 전달
 1. 수신측 공개키로 대칭키(비밀키) 암호화 대칭키로 JWE 생성
@@ -6,13 +6,13 @@
 1. 수신측에서는 JWS를 송신측 공개키로 서명 검증  
 1. 수신측에서는 JWE를 공객키로 대칭키 복호화 후 대칭키로 Payload 복호화. 
 
-* JOSE 메시지 구조
+# JOSE 메시지 구조
 - JWE 
   - Base64URL (UTF8(JWE Header))||'.'||Base64URL (JWE Encrypted Key)||'.'||Base64URL (JWE Initialization Vector)||'.'||Base64URL (JWE Ciphertext)||'.'||Base64URL (JWE Authentication Tag)
 - JWS
   - Base64URL (UTF8(JWS Header))||'.'||Base64URL (JWE)||'.'||Base64URL (JWS Signature)
 	 
-* git
+# git
 
 ```
 $ git config --global user.name "jodongik1"
@@ -22,7 +22,7 @@ $ git branch -M main
 $ git push -u origin main
 ```
 
-* 사용 라이브러리
+# 사용 라이브러리
 ```
 <dependency>
     <groupId>com.nimbusds</groupId>
@@ -37,11 +37,10 @@ $ git push -u origin main
 </dependency>
 ```	 
 
-* 사용 알고리즘
+# 사용 알고리즘
 - JWE Algorithm : RSA_OAEP_265
 - JWE Encryption Method : A256GCM
 - JWS Algorithm : PS256
-
 
 ```
 // RSA Keypair 생성
@@ -58,8 +57,7 @@ $ openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in receive_keypair.pem
 		
 ```
 
-* 알고리즘 설명
----
+# 알고리즘 설명
 * 대칭키 암호화 기법(Symmetric-Key Cryptography)
 
 단 하나의 키를 송신자와 수신자가 공유하는 방법으로 암호화 통신을 하는 방법이다. 
@@ -75,20 +73,12 @@ $ openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in receive_keypair.pem
 어마어마한 규모의 연산이 필요하기 때문에 대용량의 데이터를 암호화하기에는 적절한 방법이 아니다.
 공개키 기법의 특징으로는 Public key와 Private key를 이용하여 양자간 암호화 통신이 이루어진다는 점이다.  
 누군가의 공개키로 암호화 한 메세지는 개인키로 풀리고, 개인키로 암호화 한 메세지는 공개키로 풀린다.
-
-
 그렇다면 왜 공개키 기법을 사용할까? 두 가지 이슈를 해결하기 위해서이다.
-- key distribution : 암호화 통신을 위해서는 반드시 서로가 키를 알아야 하는데, 이 때 수신자에게 키를 안전하게 넘기기 위해(받는사람의 공개키로 암호화해서 보내면 된다.)
-- digital signatures : 이 메세지가 정말로 송신자라고 주장하는 사람으로부터 왔는지 검증하기 위해
-(대칭키로는 당연히 서명이 불가능하다. 서명을 하는 것은 본인의 개인키로만 가능하고, 확인은 모든 사람이 공개키로 할 수 있음)
+  key distribution : 암호화 통신을 위해서는 반드시 서로가 키를 알아야 하는데, 이 때 수신자에게 키를 안전하게 넘기기 위해(받는사람의 공개키로 암호화해서 보내면 된다.)
+  digital signatures : 이 메세지가 정말로 송신자라고 주장하는 사람으로부터 왔는지 검증하기 위해 (대칭키로는 당연히 서명이 불가능하다. 서명을 하는 것은 본인의 개인키로만 가능하고, 확인은 모든 사람이 공개키로 할 수 있음)
 
 * OAEP Diagram(Optimal Asymmetric Encryption padding)
 RSA는 동일한 키 값을 사용하므로 중간에 암호문을 도청하더라도 해독이 어렵지만 동일한 문자가 사용되었음은 알아챌 수 있다. 
 따라서 padding값과 추가 연산하여 같은 문자라도 다른 결과값이 나오도록 하고 있는데, 이를 OAEP라고 한다. 
 OAEP는 CCA로부터 보다 안전해지며, r값이 매번 변하므로 같은 입력에 대하여 다른 출력을 얻을 수 있다. 
 또한 부분 복원이 불가능하다.
-
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'main' of https://github.com/jodongik1/sample-jose.git
