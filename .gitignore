@@ -2,4 +2,7 @@
 .project
 target/*
 .settings/*
+bin/*
 src/test/*
+/bin/
+/target/

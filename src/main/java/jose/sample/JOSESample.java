@@ -49,40 +49,38 @@ public class JOSESample {
 	
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 	 
-	private RSAPublicKey  visa_rsaPublicKey;
-	private RSAPrivateKey visa_rsaPrivateKey; 
+	private RSAPublicKey  sanderPublicKey;
+	private RSAPrivateKey sanderPrivateKey; 
 	
-	private RSAPublicKey  sc_rsaPublicKey;
-	private RSAPrivateKey sc_rsaPrivateKey;
-	 
+	private RSAPublicKey  receivePublicKey;
+	private RSAPrivateKey receivePrivateKey;
 	
-	private final JWEAlgorithm JWE_ALGORITHM         = JWEAlgorithm.RSA_OAEP_256; 
+	private final String SANDER_PUBLICKEY_PATH   = "keystore/sander_publickey.crt";
+	private final String SANDER_PRIVATEKEY_PATH  = "keystore/sander_privatekey_pkcs8.key";
+	
+	private final String RECEIVE_PUBLICKEY_PATH  = "keystore/receive_publickey.crt";
+	private final String RECEIVE_PRIVATEKEY_PATH = "keystore/receive_privatekey_pkcs8.key";
+	
+	private final JWEAlgorithm JWE_ALGORITHM         = JWEAlgorithm.RSA_OAEP_512; 
 	private final EncryptionMethod ENCRYPTION_METHOD = EncryptionMethod.A256GCM;
 	private final JWSAlgorithm JWS_ALGORITHM         = JWSAlgorithm.PS256;
 
 	/**
 	 * RSA Keypair 생성
+	 * 
+	 * @throws Exception
 	 */
 	private void initRsaKeyPair() throws Exception{
-		
-		// $ openssl genrsa -out visa_keypair.pem 2048
-		// $ openssl genrsa -out sc_keypair.pem 2048
-		
-		// To extract the public part, use the rsa context:
-		// $ openssl rsa -in visa_keypair.pem -pubout -out visa_publickey.crt
-		// $ openssl rsa -in sc_keypair.pem -pubout -out sc_publickey.crt
-		
-		// convert the original keypair to PKCS#8 format with the pkcs8 context:
-		// $ openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in visa_keypair.pem -out visa_privatekey_pkcs8.key
-		// $ openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in sc_keypair.pem -out sc_privatekey_pkcs8.key
+		String prefix = this.getClass().getResource("/").getPath(); 
+		logger.debug("RSA PREFIX_PATH : ",prefix);
 		
 		// 송신측
-		visa_rsaPublicKey  = readPublicKey(new File("/data/workspace/visa/src/main/resources/visa_publickey.crt"));
-		visa_rsaPrivateKey = readPrivateKey(new File("/data/workspace/visa/src/main/resources/visa_privatekey_pkcs8.key"));
+		sanderPublicKey  = readPublicKey(new File(prefix + SANDER_PUBLICKEY_PATH)); // 공개키
+		sanderPrivateKey = readPrivateKey(new File(prefix + SANDER_PRIVATEKEY_PATH)); // 개인키
 		
 		// 수신측
-		sc_rsaPublicKey    = readPublicKey(new File("/data/workspace/visa/src/main/resources/sc_publickey.crt")); // 
-		sc_rsaPrivateKey   = readPrivateKey(new File("/data/workspace/visa/src/main/resources/sc_privatekey_pkcs8.key"));
+		receivePublicKey = readPublicKey(new File(prefix + RECEIVE_PUBLICKEY_PATH)); // 공개키
+		receivePrivateKey= readPrivateKey(new File(prefix + RECEIVE_PRIVATEKEY_PATH)); // 개인키
 		
 	}
 	
@@ -113,11 +111,11 @@ public class JOSESample {
 											.build(); 
 		
 		// Encrypt the JWE with the RSA public key + specified AES CEK
-		Payload jwe_paylod = new Payload("Hello World!!"); // 
+		Payload jwe_paylod = new Payload("Hello World!!");
 		JWEObject jwe = new JWEObject(jwe_header, jwe_paylod);
-		jwe.encrypt(new RSAEncrypter(sc_rsaPublicKey, cek)); //    
+		jwe.encrypt(new RSAEncrypter(receivePublicKey, cek));    
 		String jweString = jwe.serialize();
-		logger.debug("JWE:"+jweString+"");
+		logger.debug("JWE : "+jweString);
 		return jweString;
 	}
 	
@@ -132,7 +130,7 @@ public class JOSESample {
 		
 		
 		// Create RSA signer and set BC FIPS provider
-		JWSSigner signer = new RSASSASigner(visa_rsaPrivateKey); // 송신측 개인키
+		JWSSigner signer = new RSASSASigner(sanderPrivateKey); // 송신측 개인키
 		signer.getJCAContext().setProvider(BouncyCastleFIPSProviderSingleton.getInstance());
 		
 		Payload jws_paylod = new Payload(jweString);
@@ -160,7 +158,7 @@ public class JOSESample {
 	 */
 	public void verifyNdecrypt(String jweString, String jwsString ) throws Exception{
 		// Create RSA verifier and set BC FIPS provider
-		JWSVerifier verifier = new RSASSAVerifier(visa_rsaPublicKey); // 송신측 공개키 
+		JWSVerifier verifier = new RSASSAVerifier(sanderPublicKey); // 송신측 공개키 
 		verifier.getJCAContext().setProvider(BouncyCastleFIPSProviderSingleton.getInstance());
 		
 		JWSObject jws = JWSObject.parse(jwsString);
@@ -173,7 +171,7 @@ public class JOSESample {
 		JWEObject jwe = JWEObject.parse(jweString);
 		logger.debug("JWE Header : "+jwe.getHeader().toString()+"");
 		
-		jwe.decrypt(new RSADecrypter(sc_rsaPrivateKey)); // 수신측 개인키로 비밀키 복호화 후 비밀키로 Payload 복호화 처리 
+		jwe.decrypt(new RSADecrypter(receivePrivateKey)); // 수신측 개인키로 비밀키 복호화 후 비밀키로 Payload 복호화 처리 
 		logger.debug("JWE Payload : "+jwe.getPayload().toString()+"");
 	} 
 	
@@ -214,7 +212,7 @@ public class JOSESample {
 	}
 	
 	/**
-	 * Main
+	 * Main 테스트
 	 * 
 	 * @param args
 	 * @throws Exception
