@@ -42,7 +42,7 @@ import com.nimbusds.jose.crypto.bc.BouncyCastleFIPSProviderSingleton;
  * 2. 수신측 공개키로 대칭키(비밀키) 암호화 대칭키로 JWE 생성
  * 3. 송신측 개인키로 JWE 서명 후 JWS 생성 후 수신측에 JWE, JWS 전달
  * 4. 수신측에서는 JWS를 송신측 공개키로 서명 검증  
- * 5. 수신측에서는 JWE를 공객키로 대칭키 복호화 후 대칭키로 Payload 복호화. 
+ * 5. 수신측에서는 JWE를 공객키로 대칭키 복호화 후 대칭키로 payload 복호화. 
  *
  */
 public class JOSESample {
